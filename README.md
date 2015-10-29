@@ -29,4 +29,11 @@ following commands from this directory:
     $ pip install -r package_list.txt
 
 
+Running Tests
+-------------
+
+To run the tests, use the following command:
+
+    $ python -m unittest discover tests
+
 
