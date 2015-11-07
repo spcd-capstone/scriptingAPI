@@ -3,8 +3,10 @@ import socket
 
 
 class NodeNotConnected(Exception):
+
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return repr(self.value)
 
@@ -22,7 +24,8 @@ class NodeConnection:
             self.isConnected = True
             return self
         except Exception as e:
-            print("Could not connect. Exception type is %s".format(type(e).__name__))
+            # Log error here
+            #print("Could not connect. Exception type is {}".format(type(e).__name__))
             raise e
 
     def __exit__(self, type, value, traceback):
@@ -34,7 +37,10 @@ class NodeConnection:
 
     def setVal(self, key, value):
         if not self.isConnected:
-            raise NodeNotConnected("Never connected to node ({}, {})".format(self.nodeIP, self.nodePort))
+            raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
 
+    def getVal(self, key):
+        if not self.isConnected:
+            raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
 
 

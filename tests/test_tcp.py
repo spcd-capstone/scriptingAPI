@@ -3,17 +3,21 @@ import threading
 import unittest
 
 from multiprocessing.pool import ThreadPool
+from time import sleep
 
 from haapi import haapi
 
 
 class TestTCPConnections(unittest.TestCase):
 
-    def run_fake_server(self):
+    # A fake server which mimics a node. To be run in a seperate process.
+    # will pass messages to multiprocessor. Queue parameter
+    def run_fake_server(self, q = None):
         server_sock = socket.socket()
         server_sock.bind(('127.0.0.1', 7777))
         server_sock.listen(0)
         (conn, address) = server_sock.accept()
+        sleep(0.1)
         conn.close()
         server_sock.close()
 
@@ -44,6 +48,11 @@ class TestTCPConnections(unittest.TestCase):
         node = haapi.NodeConnection('127.0.0.1', 7777)
         with self.assertRaises(haapi.NodeNotConnected):
             node.setVal('on', 1)
+
+    def test_getting_when_not_connected_raises_NodeNotConnected(self):
+        node = haapi.NodeConnection('127.0.0.1', 7777)
+        with self.assertRaises(haapi.NodeNotConnected):
+            node.getVal('on')
 
 
 if __name__ == '__main__':
