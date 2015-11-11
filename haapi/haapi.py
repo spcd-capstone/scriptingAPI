@@ -1,6 +1,7 @@
 import contextlib
 import socket
 
+from haapi import serialization
 
 class NodeNotConnected(Exception):
 
@@ -11,7 +12,17 @@ class NodeNotConnected(Exception):
         return repr(self.value)
 
 
+class InvalidCommand(Exception):
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
 class NodeConnection:
+
     def __init__(self, nodeIP, nodePort):
         self.nodeIP = nodeIP
         self.nodePort = nodePort
@@ -38,9 +49,16 @@ class NodeConnection:
     def setVal(self, key, value):
         if not self.isConnected:
             raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
+        k = serialization.serialize(key)
+        v = serialization.serialize(value)
+        self.sock.send("s" + k + v)
 
     def getVal(self, key):
         if not self.isConnected:
             raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
+        k = serialization.serialize(key)
+        self.sock.send("g" + k)
+        v = self.sock.recv(1024)
+        return serialization.serialize(v)
 
 

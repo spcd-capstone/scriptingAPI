@@ -24,6 +24,7 @@ def serialize(data):
         return str(len(data)) + ":" + data
     raise InvalidType("Could not serialize type: {}".format(type(data).__name__))
 
+
 def deserialize(data):
     if (data[0] == 'i') and (data[-1] == 'e') and len(data) > 2:
         return int(data[1:-1])
