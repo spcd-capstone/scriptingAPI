@@ -51,13 +51,13 @@ class NodeConnection:
             raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
         k = serialization.serialize(key)
         v = serialization.serialize(value)
-        self.sock.send("s" + k + v)
+        self.sock.send(bytes("s" + k + v, 'UTF-8'))
 
     def getVal(self, key):
         if not self.isConnected:
             raise NodeNotConnected("Not connected to node ({}, {})".format(self.nodeIP, self.nodePort))
         k = serialization.serialize(key)
-        self.sock.send("g" + k)
+        self.sock.send(bytes("g" + k, 'UTF-8'))
         v = self.sock.recv(1024)
         return serialization.serialize(v)
 
