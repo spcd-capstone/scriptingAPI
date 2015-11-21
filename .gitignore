@@ -1,6 +1,8 @@
 bin/*
 include/*
 lib/*
+build/*
+.cache/*
 
 __pycache__
 *.py[cod]
