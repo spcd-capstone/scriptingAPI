@@ -1,3 +1,8 @@
+**WARNING: DEPRECATED**
+
+A more up-to-date version of this library is included in the server repository
+
+
 Scripting API
 =============
 
